@@ -1,0 +1,7 @@
+*.elf
+*.pyc
+*.nds
+debugrom/arm7.bin
+debugrom/arm9.bin
+debugrom/debugrom.bin
+build/
