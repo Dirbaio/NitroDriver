@@ -33,7 +33,7 @@ int hexedit(void) {
 
     clearMap();
 
-    uint ptr = 0x02000000;
+    uint ptr = 0x02600000;
     int digit = 0;
 
     u16 keys = REG_KEYINPUT;

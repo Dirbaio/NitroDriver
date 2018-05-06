@@ -2,40 +2,41 @@
 
 .globl _entrypoint
 _entrypoint:
-    ldr r1, =0x027ffff0
+    mov r12, lr
+
+    // Reset FIQ counter
+    ldr r1, =0x02600024
+    mov r2, #0
+    str r2, [r1]
+
+    // Set debug entrypoint
+    ldr r1, =0x0380FFDC
+    ldr r2, =_debug_entrypoint
+    str r2, [r1]
+
+    // Notify we're alive
+    ldr r1, =0x02600000
     ldr r2, =0x12345678
     str r2, [r1]
 
+    // Enable FIQ
+    mov R0, #0x1f
+    msr CPSR_cf, R0
+
+    // Go!
     mov r0, #0
     mov r1, #0
     mov r2, #0
     mov r3, #0
+    bx r12
 
+
+_debug_entrypoint:
+    // Increase FIQ counter
+    ldr r8, =0x02600024
+    ldr r9, [r8]
+    add r9, r9, #1
+    str r9, [r8]
+
+    // Bye
     bx lr
-
-loop:
-    mov r0, #4096
-    bl wramSleep
-    b loop
-
-
-wramSleep:
-    STMFD   SP!, {R4,R5,LR}
-    LDR     R2, =0x380FFD0
-    LDR     R4, [R2]
-    LDR     R5, [R2,#4]
-
-    LDR     R1, =0xDCFD3801
-    STR     R1, [R2]
-    LDR     R1, =0x4770
-    STR     R1, [R2,#4]
-
-    ORR     R2, R2, #1
-    MOV     R0, R0,LSL#4
-    MOV     LR, PC
-    BX      R2
-
-    STR     R4, [R2]
-    STR     R5, [R2,#4]
-
-    LDMFD   SP!, {R4,R5,PC}

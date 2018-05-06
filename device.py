@@ -159,3 +159,13 @@ class NitroDevice:
     # Screens stop refreshing, leading to a cool fading effect!
     def nds_stop(self):
         self.write(0x8a, fromhex('8a000100'))
+
+    def select_arm9(self):
+        self.write(0x8b, fromhex('8b000000'))
+
+    def select_arm7(self):
+        self.write(0x8b, fromhex('8b000100'))
+
+    def trigger_fiq(self):
+        self.write(0xaa, fromhex('aa000100'))
+        self.write(0xaa, fromhex('aa000000'))
