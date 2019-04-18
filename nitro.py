@@ -5,7 +5,6 @@ import struct
 import time
 import sys
 import argparse
-import time
 
 from util import fromhex, tohex, tohex_short, read_file
 from device import NitroDevice
